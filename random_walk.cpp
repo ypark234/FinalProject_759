@@ -22,9 +22,9 @@ class event_log {
     // store path length
         double pl;
     //  collision location
-        double x = 0; double y = 0; double z = 0;
+        double x = 0; double y = 0;
     // particle direction
-        double u; double v; double w;
+        double u; double v;
     // store particle energy
         double E;
 
@@ -36,7 +36,6 @@ class event_log {
 	  std::vector<double> direction = sample_direction();
             u = direction[0];
             v = direction[1];
-            w = direction[2];
         }
     // Get particle energy
         void get_energy(){ 
@@ -45,22 +44,19 @@ class event_log {
             E = normal_dist(generator);
         }
     // calculate particle radius
-        double radius() {return sqrt(x*x + y*y + z*z);}
+        double radius() {return sqrt(x*x + y*y);}
     // update particle location
         void update_location() {
             x += pl*u;
             y += pl*v;
-            z += pl*w;
         }
 
     // save particle log
   void save_log(std::ofstream& logfile){
 	  logfile << std::left << std::setw(SET_COL) << x
 		  << std::left << std::setw(SET_COL) << y
-		  << std::left << std::setw(SET_COL) << z
 		  << std::left << std::setw(SET_COL) << u
 		  << std::left << std::setw(SET_COL) << v
-		  << std::left << std::setw(SET_COL) << w
 		  << std::left << std::setw(SET_COL) << pl
 		  << std::left << std::setw(SET_COL) << E << "\n";
         }
@@ -81,18 +77,15 @@ std::vector<double> sample_direction(){
     // sample the particle direction in cartesian space, return a direction
     // vector, (u, v, w)
 
-    double psi = static_cast<double>( rand() ) / static_cast<double>(RAND_MAX);
     double eta = static_cast<double>( rand() ) / static_cast<double>(RAND_MAX);
     
     std::vector<double> direction(3);
     double pi = 4*atan(1);
-    double w = 2*psi - 1;
-    double u = sqrt(1-w*w)*cos(2*pi*eta);
-    double v = sqrt(1-w*w)*sin(2*pi*eta);
+    double u = cos(2*pi*eta);
+    double v = sin(2*pi*eta);
 
     direction[0] = u;
     direction[1] = v;
-    direction[2] = w;
 
     return direction;
 }
